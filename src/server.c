@@ -6,24 +6,27 @@
 /*   By: lserodon <lserodon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 14:19:43 by lserodon          #+#    #+#             */
-/*   Updated: 2025/03/22 16:37:07 by lserodon         ###   ########.fr       */
+/*   Updated: 2025/03/23 13:13:04 by lserodon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minitalk.h"
 
+t_data	g_data = {0, 0};
+
 void	handler_signal(int signum)
 {
-	int	bit;
-	char res;
-
-	bit = 0;
-	while(bit < 8)
+	if (signum == SIGUSR1)
+		g_data.c |= (1 << (7 - g_data.bit_index));
+	g_data.bit_index++;
+	if (g_data.bit_index == 8)
 	{
-		res = res << 1;
-		if (signum == SIGUSR1)
-			res = res | 1;
-		bit++;
+		if (g_data.c == '\0')
+			write(1, "\n", 1);
+		else
+			write(1, &g_data.c, 1);
+		g_data.bit_index = 0;
+		g_data.c = 0;	
 	}
 }
 

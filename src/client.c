@@ -6,7 +6,7 @@
 /*   By: lserodon <lserodon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 14:20:11 by lserodon          #+#    #+#             */
-/*   Updated: 2025/03/22 16:26:35 by lserodon         ###   ########.fr       */
+/*   Updated: 2025/03/23 13:16:51 by lserodon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void send_bits(int pid, char c)
 	bit = 7;
 	while (bit >= 0)
 	{
-		if ((c & (1 << bit)) != 0)
+		if (c & 1 << bit)
 			kill(pid, SIGUSR1);
 		else
 			kill(pid, SIGUSR2);
@@ -40,7 +40,10 @@ int main(int argc, char **argv)
 	{
 		pid = ft_atoi(argv[1]);
 		while (argv[2][i] != '\0')
+		{
 			send_bits(pid, argv[2][i]);
+			i++;	
+		}
 		send_bits(pid, '\0');
 	}
 }

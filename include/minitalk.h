@@ -6,7 +6,7 @@
 /*   By: lserodon <lserodon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 17:14:25 by lserodon          #+#    #+#             */
-/*   Updated: 2025/03/22 15:46:56 by lserodon         ###   ########.fr       */
+/*   Updated: 2025/03/23 09:43:57 by lserodon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,19 @@
 # include <unistd.h>
 # include <stdio.h>
 
-/* ----- MINITALK ----- */
+/* ----- STRUCTURE ----- */
+
+typedef struct s_data
+{
+    char    c;
+    int     bit_index;
+} t_data;
+
+/* ----- SERVER.C ----- */
+void	handler_signal(int signum);
+
+/* ----- CLIENT.C ----- */
+void send_bits(int pid, char c);
+
 
 #endif

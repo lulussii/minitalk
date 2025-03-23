@@ -1,28 +1,36 @@
 MAKEFLAGS += --no-print-directory
-NAME = minitalk
+CLIENT_NAME = client
+SERVER_NAME = server
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -g
 
 SRCS_DIR = src
 OBJS_DIR = objs
 
-SRCS = server.c\
+CLIENT_SRCS = $(SRCS_DIR)/client.c
+SERVER_SRCS = $(SRCS_DIR)/server.c
 
-OBJS = $(addprefix $(OBJS_DIR)/, $(notdir $(SRCS:.c=.o)))
+CLIENT_OBJS = $(addprefix $(OBJS_DIR)/, $(notdir $(CLIENT_SRCS:.c=.o)))
+SERVER_OBJS = $(addprefix $(OBJS_DIR)/, $(notdir $(SERVER_SRCS:.c=.o)))
 
 LIBFT_DIR = ./libft
 LIBFT = $(LIBFT_DIR)/libft.a
 
-all: $(NAME)
+all: $(CLIENT_NAME) $(SERVER_NAME)
 
 $(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c
 	@mkdir -p $(OBJS_DIR)
 	@$(CC) $(CFLAGS) -c $< -o $@
 
-$(NAME): $(OBJS) $(LIBFT)
-	@echo "Compiling $(NAME)..."
-	@$(CC) $(CFLAGS) $(OBJS) -L$(LIBFT_DIR) -lft -o $(NAME)
-	@echo "$(NAME) successfully created! 🎉"
+$(CLIENT_NAME): $(CLIENT_OBJS) $(LIBFT)
+	@echo "Compiling $(CLIENT_NAME)..."
+	@$(CC) $(CFLAGS) $(CLIENT_OBJS) -L$(LIBFT_DIR) -lft -o $(CLIENT_NAME)
+	@echo "$(CLIENT_NAME) successfully created! 🎉"
+
+$(SERVER_NAME): $(SERVER_OBJS) $(LIBFT)
+	@echo "Compiling $(SERVER_NAME)..."
+	@$(CC) $(CFLAGS) $(SERVER_OBJS) -L$(LIBFT_DIR) -lft -o $(SERVER_NAME)
+	@echo "$(SERVER_NAME) successfully created! 🎉"
 
 $(LIBFT): 
 	@make -C $(LIBFT_DIR) --no-print-directory
@@ -34,8 +42,8 @@ clean:
 	@make -C $(LIBFT_DIR) clean
 
 fclean: clean
-	@echo "Removing $(NAME)"
-	@rm -f $(NAME)
+	@echo "Removing $(CLIENT_NAME) and $(SERVER_NAME)" 
+	@rm -f $(CLIENT_NAME) $(SERVER_NAME)
 	@make -C $(LIBFT_DIR) fclean
 
 re: fclean all
