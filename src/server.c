@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lserodon <lserodon@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lulussi <lulussi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 14:19:43 by lserodon          #+#    #+#             */
-/*   Updated: 2025/03/23 13:13:04 by lserodon         ###   ########.fr       */
+/*   Updated: 2025/03/25 17:01:36 by lulussi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,32 +14,37 @@
 
 t_data	g_data = {0, 0};
 
-void	handler_signal(int signum)
+void	handler_signal(int signum, siginfo_t *info, void *context)
 {
+	(void)context;
 	if (signum == SIGUSR1)
 		g_data.c |= (1 << (7 - g_data.bit_index));
 	g_data.bit_index++;
 	if (g_data.bit_index == 8)
 	{
 		if (g_data.c == '\0')
+		{
 			write(1, "\n", 1);
+			kill(info->si_pid, SIGUSR2);
+		}
 		else
 			write(1, &g_data.c, 1);
 		g_data.bit_index = 0;
-		g_data.c = 0;	
+		g_data.c = 0;
 	}
+	kill(info->si_pid, SIGUSR1);
 }
 
-int	main(int argc, char **argv)
+int	main(void)
 {
-	int	pid;
+	struct sigaction	sa;
 
-	pid = getpid();
-	(void)argv;
-	ft_printf("Serveur démarré. PID : %i\n", pid);
-	signal(SIGUSR1, handler_signal);
-	signal(SIGUSR2, handler_signal);
-	while (argc == 1)
+	sa.sa_sigaction = handler_signal;
+	sa.sa_flags = SA_SIGINFO;
+	sigaction(SIGUSR1, &sa, NULL);
+	sigaction(SIGUSR2, &sa, NULL);
+	ft_printf("Serveur démarré. PID : %i\n", getpid());
+	while (1)
 		pause();
 	return (0);
 }

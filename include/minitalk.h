@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minitalk.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lserodon <lserodon@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lulussi <lulussi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 17:14:25 by lserodon          #+#    #+#             */
-/*   Updated: 2025/03/23 09:43:57 by lserodon         ###   ########.fr       */
+/*   Updated: 2025/03/25 16:54:52 by lulussi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,15 +24,14 @@
 
 typedef struct s_data
 {
-    char    c;
-    int     bit_index;
-} t_data;
+	char	c;
+	int		bit_index;
+}				t_data;
 
 /* ----- SERVER.C ----- */
-void	handler_signal(int signum);
+void	handler_signal(int signum, siginfo_t *info, void *context);
 
 /* ----- CLIENT.C ----- */
-void send_bits(int pid, char c);
-
+void	send_bits(int pid, char c);
 
 #endif
