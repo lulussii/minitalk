@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   client.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lulussi <lulussi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lserodon <lserodon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 14:20:11 by lserodon          #+#    #+#             */
-/*   Updated: 2025/03/25 16:59:16 by lulussi          ###   ########.fr       */
+/*   Updated: 2025/03/26 16:50:17 by lserodon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,17 +33,18 @@ void	send_bits(int pid, char c)
 	int	bit;
 
 	bit = 7;
+	g_received_signal = 0;
 	while (bit >= 0)
 	{
 		if (c & 1 << bit)
 		{
 			kill(pid, SIGUSR1);
-			usleep(100);
+			usleep(10000);
 		}
 		else
 		{
 			kill(pid, SIGUSR2);
-			usleep(100);
+			usleep(10000);
 		}
 		while (!g_received_signal)
 			pause();
