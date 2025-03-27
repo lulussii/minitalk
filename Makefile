@@ -4,6 +4,9 @@ SERVER_NAME = server
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -g
 
+HEADER_DIR = include
+HEADER = $(HEADER_DIR)/minitalk.h
+
 SRCS_DIR = src
 OBJS_DIR = objs
 
@@ -15,26 +18,28 @@ SERVER_OBJS = $(addprefix $(OBJS_DIR)/, $(notdir $(SERVER_SRCS:.c=.o)))
 
 LIBFT_DIR = ./libft
 LIBFT = $(LIBFT_DIR)/libft.a
+LIBFT_SRCS = $(wildcard $(LIBFT_DIR)/*.c)
+LIBFT_MAKEFILE = $(LIBFT_DIR)/Makefile
 
-all: $(CLIENT_NAME) $(SERVER_NAME)
+all: $(CLIENT_NAME) $(SERVER_NAME) $(LIBFT)
 
 $(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c
 	@mkdir -p $(OBJS_DIR)
 	@$(CC) $(CFLAGS) -c $< -o $@
 
-$(CLIENT_NAME): $(CLIENT_OBJS) $(LIBFT)
+$(CLIENT_NAME): $(CLIENT_OBJS) $(LIBFT) $(HEADER)
 	@echo "Compiling $(CLIENT_NAME)..."
 	@$(CC) $(CFLAGS) $(CLIENT_OBJS) -L$(LIBFT_DIR) -lft -o $(CLIENT_NAME)
 	@echo "$(CLIENT_NAME) successfully created! 🎉"
 
-$(SERVER_NAME): $(SERVER_OBJS) $(LIBFT)
+$(SERVER_NAME): $(SERVER_OBJS) $(LIBFT) $(HEADER)
 	@echo "Compiling $(SERVER_NAME)..."
 	@$(CC) $(CFLAGS) $(SERVER_OBJS) -L$(LIBFT_DIR) -lft -o $(SERVER_NAME)
 	@echo "$(SERVER_NAME) successfully created! 🎉"
 
-$(LIBFT): 
-	@make -C $(LIBFT_DIR) --no-print-directory
-	@touch $(LIBFT) 
+$(LIBFT): $(LIBFT_SRCS) $(LIBFT_MAKEFILE)
+	@echo "🛠️  Compiling libft..."
+	@make -C $(LIBFT_DIR)
 
 clean: 
 	@echo "Cleaning object files..."

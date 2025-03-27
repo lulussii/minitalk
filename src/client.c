@@ -6,19 +6,13 @@
 /*   By: lserodon <lserodon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 14:20:11 by lserodon          #+#    #+#             */
-/*   Updated: 2025/03/26 16:50:17 by lserodon         ###   ########.fr       */
+/*   Updated: 2025/03/27 14:17:05 by lserodon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minitalk.h"
 
 volatile sig_atomic_t	g_received_signal = 0;
-
-void	check_message(int signum)
-{
-	if (signum == SIGUSR2)
-		ft_printf("Message reçu !\n");
-}
 
 void	handler_client(int signum)
 {
@@ -59,14 +53,20 @@ int	main(int argc, char **argv)
 
 	i = 0;
 	if (argc != 3)
-		return (0);
+		return (1);
 	pid = ft_atoi(argv[1]);
 	signal(SIGUSR1, handler_client);
-	signal(SIGUSR2, check_message);
+	signal(SIGUSR2, handler_client);
+	if (kill(pid, 0) == -1)
+	{
+		ft_printf("Error : Wrong PID\n");
+		return (1);
+	}
 	while (argv[2][i] != '\0')
 	{
 		send_bits(pid, argv[2][i]);
 		i++;
 	}
 	send_bits(pid, '\0');
+	return (0);
 }

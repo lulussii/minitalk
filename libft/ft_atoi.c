@@ -6,7 +6,7 @@
 /*   By: lserodon <lserodon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 09:28:27 by lserodon          #+#    #+#             */
-/*   Updated: 2024/11/22 15:36:40 by lserodon         ###   ########.fr       */
+/*   Updated: 2025/03/27 14:39:16 by lserodon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ int	ft_atoi(const char *str)
 	i = 0;
 	sign = 1;
 	temp = 0;
+	if (!str)
+		return (0);
 	while ((str[i] >= 9 && str[i] <= 13) || ((str[i] == ' ') && str[i]))
 		i++;
 	while ((str[i] == '-' || str[i] == '+') && str[i])
