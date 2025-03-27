@@ -6,7 +6,7 @@
 /*   By: lserodon <lserodon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 14:20:11 by lserodon          #+#    #+#             */
-/*   Updated: 2025/03/27 14:17:05 by lserodon         ###   ########.fr       */
+/*   Updated: 2025/03/27 14:46:06 by lserodon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ int	main(int argc, char **argv)
 	if (argc != 3)
 		return (1);
 	pid = ft_atoi(argv[1]);
+	if (!pid)
+		return (1);
 	signal(SIGUSR1, handler_client);
 	signal(SIGUSR2, handler_client);
 	if (kill(pid, 0) == -1)
